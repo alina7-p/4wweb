@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Assignment #4 — Forms & Validation</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg-dark: #121318;
+      --card-bg: #1c1d24;
+      --input-bg: #252731;
+      --border-color: #2e313d;
+      --accent-pink: #ec4899;
+      --accent-purple: #8b5cf6;
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+      --valid-color: #10b981;
+      --invalid-color: #f43f5e;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      min-height: 100vh;
+      padding-bottom: 4rem;
+    }
+
+    .app-header {
+      background: rgba(28, 29, 36, 0.8);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-color);
+      padding: 1.25rem 0;
+      margin-bottom: 2rem;
+    }
+
+    .nav-pills-custom {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      padding: 6px;
+      border-radius: 14px;
+      display: inline-flex;
+      gap: 6px;
+      margin-bottom: 2rem;
+    }
+
+    .nav-pills-custom .nav-link {
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 0.9rem;
+      border-radius: 10px;
+      padding: 0.6rem 1.25rem;
+      transition: all 0.2s ease;
+    }
+
+    .nav-pills-custom .nav-link.active {
+      background: linear-gradient(135deg, var(--accent-pink), var(--accent-purple));
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(236, 72, 153, 0.25);
+    }
+
+    .nav-pills-custom .nav-link:hover:not(.active) {
+      color: var(--text-main);
+      background: var(--input-bg);
+    }
+
+    .form-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 18px;
+      padding: 2.5rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .card-tag {
+      color: var(--accent-pink);
+      font-weight: 600;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.5rem;
+    }
+
+    .card-heading {
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 0.5rem;
+    }
+
+    .card-desc {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-bottom: 2rem;
+    }
+
+    .form-label {
+      color: #e5e7eb;
+      font-weight: 500;
+      font-size: 0.9rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .form-control, .form-select {
+      background-color: var(--input-bg);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      border-radius: 10px;
+      padding: 0.7rem 1rem;
+      font-size: 0.925rem;
+    }
+
+    .form-control::placeholder {
+      color: #6b7280;
+    }
+
+    .form-control:focus, .form-select:focus {
+      background-color: var(--input-bg);
+      color: #ffffff;
+      border-color: var(--accent-pink);
+      box-shadow: 0 0 0 4px rgba(236, 72, 153, 0.15);
+    }
+
+    .form-select option {
+      background-color: var(--card-bg);
+      color: var(--text-main);
+    }
+
+    .form-check-input {
+      background-color: var(--input-bg);
+      border-color: var(--border-color);
+    }
+
+    .form-check-input:checked {
+      background-color: var(--accent-pink);
+      border-color: var(--accent-pink);
+    }
+
+    .form-check-label {
+      color: #d1d5db;
+      font-size: 0.9rem;
+    }
+
+    .btn-pink {
+      background: linear-gradient(135deg, var(--accent-pink), var(--accent-purple));
+      border: none;
+      color: #ffffff;
+      font-weight: 600;
+      border-radius: 10px;
+      padding: 0.7rem 1.5rem;
+    }
+
+    .btn-outline-custom {
+      background: transparent;
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+      font-weight: 500;
+      border-radius: 10px;
+      padding: 0.7rem 1.5rem;
+    }
+
+    .btn-outline-custom:hover {
+      background: var(--input-bg);
+      color: var(--text-main);
+    }
+
+    .form-control.is-valid {
+      border-color: var(--valid-color) !important;
+      background-image: none !important;
+    }
+    .valid-feedback {
+      color: var(--valid-color) !important;
+      font-size: 0.825rem;
+    }
+
+    .form-control.is-invalid {
+      border-color: var(--invalid-color) !important;
+      background-image: none !important;
+    }
+    .invalid-feedback {
+      color: var(--invalid-color) !important;
+      font-size: 0.825rem;
+    }
+
+    .req-star {
+      color: var(--accent-pink);
+    }
+  </style>
+</head>
+<body>
+
+  <header class="app-header">
+    <div class="container d-flex justify-content-between align-items-center">
+      <div>
+        <h1 class="h4 mb-0 text-white fw-bold">Forms & Validation</h1>
+        <small class="text-muted">Web Technologies 1. Front-End</small>
+      </div>
+    </div>
+  </header>
+
+  <main class="container" style="max-width: 860px;">
+
+    <div class="text-center">
+      <ul class="nav nav-pills nav-pills-custom justify-content-center" id="formTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active" id="part1-tab" data-bs-toggle="pill" data-bs-target="#part1" type="button" role="tab">Part 1: Basic HTML</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="part2-tab" data-bs-toggle="pill" data-bs-target="#part2" type="button" role="tab">Part 2: Bootstrap Styles</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="part3-tab" data-bs-toggle="pill" data-bs-target="#part3" type="button" role="tab">Part 3: Registration Project</button>
+        </li>
+      </ul>
+    </div>
+
+    <div class="tab-content" id="formTabsContent">
+
+      <div class="tab-pane fade show active" id="part1" role="tabpanel">
+        <section class="form-card">
+          <div class="card-tag">Part 01</div>
+          <h2 class="h3 card-heading">Basic HTML Contact Form</h2>
+
+          <form action="#" method="GET">
+            <div class="mb-3">
+              <label for="p1-name" class="form-label">Full Name <span class="req-star">*</span></label>
+              <input type="text" class="form-control" id="p1-name" name="name" required minlength="2" placeholder="e.g. Alex Johnson">
+            </div>
+
+            <div class="mb-3">
+              <label for="p1-email" class="form-label">Email Address <span class="req-star">*</span></label>
+              <input type="email" class="form-control" id="p2-email" name="email" required placeholder="name@example.com">
+<div class="invalid-feedback">Please enter a valid email.</div>
+<div class="valid-feedback">Looks good!</div>
+            </div>
+
+            <div class="mb-4">
+              <label for="p1-message" class="form-label">Message <span class="req-star">*</span></label>
+              <textarea class="form-control" id="p1-message" name="message" rows="4" required maxlength="500" placeholder="Type your message..."></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-outline-custom">Submit Basic Form</button>
+          </form>
+        </section>
+      </div>
+
+      <div class="tab-pane fade" id="part2" role="tabpanel">
+        <section class="form-card">
+          <div class="card-tag">Part 02</div>
+          <h2 class="h3 card-heading">Bootstrap Form & Validation</h2>
+
+          <form action="#" method="GET" novalidate>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label for="p2-name" class="form-label">Name <span class="req-star">*</span></label>
+                <input type="text" class="form-control" id="p2-name" name="name" required minlength="2" placeholder="Enter your name">
+              </div>
+
+              <div class="col-md-6">
+                <label for="p2-email" class="form-label">Email <span class="req-star">*</span></label>
+                <input type="email" class="form-control" id="p2-email" name="email" required placeholder="name@example.com">
+              </div>
+
+              <div class="col-12">
+                <label for="p2-message" class="form-label">Message <span class="req-star">*</span></label>
+                <textarea class="form-control" id="p2-message" name="message" rows="3" placeholder="Write feedback..." required></textarea>
+              </div>
+
+              <div class="col-12 pt-2">
+                <button type="submit" class="btn btn-pink">Submit Form</button>
+              </div>
+            </div>
+          </form>
+        </section>
+      </div>
+
+      <div class="tab-pane fade" id="part3" role="tabpanel">
+        <section class="form-card">
+          <div class="card-tag">Part 03</div>
+          <h2 class="h3 card-heading">Comprehensive Registration Form</h2>
+
+          <form action="#" method="POST" novalidate>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label for="reg-first-name" class="form-label">First Name <span class="req-star">*</span></label>
+                <input type="text" class="form-control" id="reg-first-name" name="firstName" required minlength="2" placeholder="First name">
+              </div>
+              <div class="col-md-6">
+                <label for="reg-last-name" class="form-label">Last Name <span class="req-star">*</span></label>
+                <input type="text" class="form-control" id="reg-last-name" name="lastName" required minlength="2" placeholder="Last name">
+              </div>
+
+              <div class="col-12">
+                <label for="reg-email" class="form-label">Email Address <span class="req-star">*</span></label>
+                <input type="email" class="form-control" id="reg-email" name="email" required placeholder="name@domain.com">
+              </div>
+
+              <div class="col-md-6">
+                <label for="reg-password" class="form-label">Password <span class="req-star">*</span></label>
+                <input type="password" class="form-control" id="reg-password" name="password" required minlength="8" placeholder="at least 8 characters">
+              </div>
+              <div class="col-md-6">
+                <label for="reg-confirm-password" class="form-label">Confirm Password <span class="req-star">*</span></label>
+                <input type="password" class="form-control" id="reg-confirm-password" name="confirmPassword" required minlength="8" placeholder="Repeat password">
+              </div>
+
+              <div class="col-12">
+                <label class="form-label d-block mb-2">Gender <span class="req-star">*</span></label>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="genderOptions" id="genderMale" value="male" required>
+                  <label class="form-check-label" for="genderMale">Male</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="genderOptions" id="genderFemale" value="female" required>
+                  <label class="form-check-label" for="genderFemale">Female</label>
+                </div>
+              </div>
+
+              <div class="col-12">
+                <label class="form-label d-block mb-2">Hobbies</label>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="checkbox" id="hobbyBaking" value="baking">
+                  <label class="form-check-label" for="hobbyBaking">Baking</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="checkbox" id="hobbyHiking" value="hiking">
+                  <label class="form-check-label" for="hobbyHiking">Hiking</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="checkbox" id="hobbyShooting" value="shooting">
+                  <label class="form-check-label" for="hobbyShooting">Painting</label>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <label for="reg-country" class="form-label">Country <span class="req-star">*</span></label>
+                <select class="form-select" id="reg-country" name="country" required>
+                  <option value="" disabled selected>Select country...</option>
+                  <option value="Kazakhstan">Kazakhstan</option>
+                  <option value="United States">United States</option>
+                  <option value="United Kingdom">United Kingdom</option>
+                  <option value="Germany">Germany</option>
+                  <option value="Turkey">Turkey</option>
+                </select>
+              </div>
+
+              <div class="col-12 pt-3">
+                <button type="submit" class="btn btn-pink me-2">Complete Registration</button>
+                <button type="reset" class="btn btn-outline-custom">Reset</button>
+              </div>
+            </div>
+          </form>
+        </section>
+      </div>
+
+    </div>
+
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+const password = document.getElementById('reg-password');
+const confirmPassword = document.getElementById('reg-confirm-password');
+
+function checkPasswords() {
+  confirmPassword.setCustomValidity(
+    password.value === confirmPassword.value
+      ? ''
+      : 'Passwords do not match'
+  );
+}
+password.addEventListener('input', checkPasswords);
+confirmPassword.addEventListener('input', checkPasswords);
+</script>
+<script>
+document.querySelectorAll('.form-card form').forEach(form => {
+  form.addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    form.querySelectorAll('input, textarea, select').forEach(field => {
+      if (field.type === 'radio' || field.type === 'checkbox') return;
+
+      field.classList.remove('is-valid', 'is-invalid');
+
+      if (field.checkValidity()) {
+        field.classList.add('is-valid');
+      } else {
+        field.classList.add('is-invalid');
+      }
+    });
+  });
+});
+</script>
+</body>
+</html>
